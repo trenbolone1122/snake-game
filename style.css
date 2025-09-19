@@ -1,0 +1,221 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.game-container {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.screen.hidden {
+    display: none;
+}
+
+/* Title Screen */
+.title-content h1 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+}
+
+.instructions {
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.instructions p {
+    margin: 10px 0;
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+/* Game Screen */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.score-container {
+    display: flex;
+    gap: 30px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-label {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+#current-score, #high-score {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.status {
+    background: #f59e0b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.game-canvas-container {
+    position: relative;
+    margin: 0 auto;
+}
+
+#game-canvas {
+    border: 3px solid #4ade80;
+    border-radius: 10px;
+    background: #111;
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+}
+
+.game-controls {
+    margin-top: 20px;
+    opacity: 0.7;
+    font-size: 0.9em;
+}
+
+/* Game Over Screen */
+.game-over-content h2 {
+    font-size: 2.5em;
+    color: #ef4444;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.final-score-container {
+    margin-bottom: 30px;
+}
+
+#final-score {
+    font-size: 2em;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+#high-score-message {
+    background: linear-gradient(45deg, #f59e0b, #eab308);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    margin-top: 15px;
+    font-weight: bold;
+    animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Buttons */
+.btn {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+}
+
+.btn-secondary:hover {
+    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .title-content h1 {
+        font-size: 2.5em;
+    }
+    
+    #game-canvas {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .game-over-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .score-container {
+        gap: 20px;
+    }
+}
