@@ -1,4 +1,4 @@
-// 3D Snake Game Implementation using Three.js
+// 3D Snake Game Implementation using Three.js - FIXED VERSION
 
 class Snake3DGame {
     constructor() {
@@ -33,13 +33,13 @@ class Snake3DGame {
         this.snakeSegments = [];
         this.foodMesh = null;
         
-        // Camera controls
+        // Camera controls - FIXED INITIAL POSITION
         this.mouseDown = false;
         this.mouseX = 0;
         this.mouseY = 0;
-        this.cameraAngleX = -0.5;
+        this.cameraAngleX = -0.8; // Better initial angle
         this.cameraAngleY = 0;
-        this.cameraDistance = 20;
+        this.cameraDistance = 25; // Increased distance
         
         // DOM elements
         this.titleScreen = document.getElementById('title-screen');
@@ -53,6 +53,7 @@ class Snake3DGame {
         this.gameCanvasContainer = document.getElementById('game-canvas');
         this.previewCanvasContainer = document.getElementById('preview-canvas');
         
+        console.log('3D Snake Game initializing...');
         this.initializeGame();
     }
     
@@ -60,7 +61,9 @@ class Snake3DGame {
         this.loadHighScore();
         this.setupEventListeners();
         this.updateHighScoreDisplay();
-        this.initPreview();
+        
+        // Initialize preview immediately
+        setTimeout(() => this.initPreview(), 100);
         this.showScreen('title');
     }
     
@@ -79,44 +82,55 @@ class Snake3DGame {
     }
     
     initPreview() {
-        // Create preview 3D scene
-        this.previewScene = new THREE.Scene();
-        this.previewCamera = new THREE.PerspectiveCamera(75, 300/200, 0.1, 1000);
-        this.previewRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.previewRenderer.setSize(300, 200);
-        this.previewRenderer.setClearColor(0x000000, 0.1);
-        
-        this.previewCanvasContainer.appendChild(this.previewRenderer.domElement);
-        
-        // Add lights
-        const previewLight = new THREE.DirectionalLight(0x00ffff, 1);
-        previewLight.position.set(5, 10, 5);
-        this.previewScene.add(previewLight);
-        
-        const previewAmbient = new THREE.AmbientLight(0x404040, 0.3);
-        this.previewScene.add(previewAmbient);
-        
-        // Create preview snake
-        for (let i = 0; i < 5; i++) {
-            const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-            const material = new THREE.MeshLambertMaterial({ 
-                color: i === 0 ? 0x00ff00 : 0x008800 
-            });
-            const cube = new THREE.Mesh(geometry, material);
-            cube.position.set(i * 0.9 - 2, 0, 0);
-            this.previewScene.add(cube);
+        try {
+            console.log('Initializing 3D preview...');
+            // Create preview 3D scene
+            this.previewScene = new THREE.Scene();
+            this.previewCamera = new THREE.PerspectiveCamera(75, 300/200, 0.1, 1000);
+            this.previewRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            this.previewRenderer.setSize(300, 200);
+            this.previewRenderer.setClearColor(0x001122, 0.5);
+            
+            // Clear any existing canvas
+            this.previewCanvasContainer.innerHTML = '';
+            this.previewCanvasContainer.appendChild(this.previewRenderer.domElement);
+            
+            // IMPROVED LIGHTING
+            const previewLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            previewLight.position.set(5, 8, 5);
+            this.previewScene.add(previewLight);
+            
+            const previewAmbient = new THREE.AmbientLight(0x404040, 0.6);
+            this.previewScene.add(previewAmbient);
+            
+            // Create preview snake with better visibility
+            const previewSnakeSegments = [];
+            for (let i = 0; i < 5; i++) {
+                const geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color: i === 0 ? 0x00ff00 : 0x00aa00 
+                });
+                const cube = new THREE.Mesh(geometry, material);
+                cube.position.set(i * 1.0 - 2, 0, 0);
+                previewSnakeSegments.push(cube);
+                this.previewScene.add(cube);
+            }
+            
+            // Better camera positioning
+            this.previewCamera.position.set(4, 4, 4);
+            this.previewCamera.lookAt(0, 0, 0);
+            
+            console.log('Preview initialized successfully');
+            this.animatePreview();
+        } catch (error) {
+            console.error('Preview initialization failed:', error);
         }
-        
-        this.previewCamera.position.set(3, 3, 3);
-        this.previewCamera.lookAt(0, 0, 0);
-        
-        this.animatePreview();
     }
     
     animatePreview() {
         const animate = () => {
-            if (this.gameState === 'title') {
-                this.previewScene.rotation.y += 0.01;
+            if (this.gameState === 'title' && this.previewRenderer && this.previewScene) {
+                this.previewScene.rotation.y += 0.015;
                 this.previewRenderer.render(this.previewScene, this.previewCamera);
                 this.previewLoopId = requestAnimationFrame(animate);
             }
@@ -125,76 +139,106 @@ class Snake3DGame {
     }
     
     initGame3D() {
-        // Create main 3D scene
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        
-        const container = this.gameCanvasContainer;
-        const rect = container.getBoundingClientRect();
-        this.renderer.setSize(rect.width, rect.height);
-        this.renderer.setClearColor(0x001122);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        
-        container.appendChild(this.renderer.domElement);
-        
-        this.setupLighting();
-        this.createArena();
-        this.updateCamera();
-        this.setupMouseControls();
+        try {
+            console.log('Initializing main 3D scene...');
+            
+            // Create main 3D scene
+            this.scene = new THREE.Scene();
+            this.scene.background = new THREE.Color(0x001122);
+            
+            // FIXED CAMERA SETUP
+            const container = this.gameCanvasContainer;
+            const rect = container.getBoundingClientRect();
+            this.camera = new THREE.PerspectiveCamera(75, rect.width / rect.height, 0.1, 1000);
+            
+            this.renderer = new THREE.WebGLRenderer({ antialias: true });
+            this.renderer.setSize(rect.width, rect.height);
+            this.renderer.setClearColor(0x001122);
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Clear container and add renderer
+            container.innerHTML = '';
+            container.appendChild(this.renderer.domElement);
+            
+            this.setupLighting();
+            this.createArena();
+            this.updateCamera();
+            this.setupMouseControls();
+            
+            console.log('Main 3D scene initialized successfully');
+        } catch (error) {
+            console.error('3D scene initialization failed:', error);
+        }
     }
     
     setupLighting() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        // ENHANCED LIGHTING SETUP
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6); // Increased ambient
         this.scene.add(ambientLight);
         
-        // Directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(10, 20, 10);
+        // Main directional light
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(15, 25, 15);
         directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 100;
+        directionalLight.shadow.camera.left = -20;
+        directionalLight.shadow.camera.right = 20;
+        directionalLight.shadow.camera.top = 20;
+        directionalLight.shadow.camera.bottom = -20;
         this.scene.add(directionalLight);
         
         // Snake head light
-        this.snakeLight = new THREE.PointLight(0x00ffff, 0.6, 10);
-        this.snakeLight.position.set(0, 2, 0);
+        this.snakeLight = new THREE.PointLight(0x00ffff, 0.8, 15);
+        this.snakeLight.position.set(0, 3, 0);
         this.scene.add(this.snakeLight);
+        
+        console.log('Lighting setup complete');
     }
     
     createArena() {
-        // Ground
-        const groundGeometry = new THREE.PlaneGeometry(this.BOARD_SIZE, this.BOARD_SIZE);
+        // Ground with grid pattern
+        const groundGeometry = new THREE.PlaneGeometry(this.BOARD_SIZE, this.BOARD_SIZE, 15, 15);
         const groundMaterial = new THREE.MeshLambertMaterial({ 
             color: 0x003366,
-            transparent: true,
-            opacity: 0.8
+            wireframe: false
         });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2;
         ground.receiveShadow = true;
         this.scene.add(ground);
         
+        // Grid lines for better visibility
+        const gridHelper = new THREE.GridHelper(this.BOARD_SIZE, this.BOARD_SIZE, 0x004488, 0x002244);
+        gridHelper.position.y = 0.01;
+        this.scene.add(gridHelper);
+        
         // Walls
         const wallHeight = 2;
         const wallMaterial = new THREE.MeshLambertMaterial({ color: 0x0066cc });
         
-        // Create 4 walls
+        // Create 4 walls with correct positioning
+        const halfBoard = this.BOARD_SIZE / 2;
         const walls = [
-            { pos: [0, wallHeight/2, this.BOARD_SIZE/2], rot: [0, 0, 0] },
-            { pos: [0, wallHeight/2, -this.BOARD_SIZE/2], rot: [0, 0, 0] },
-            { pos: [this.BOARD_SIZE/2, wallHeight/2, 0], rot: [0, Math.PI/2, 0] },
-            { pos: [-this.BOARD_SIZE/2, wallHeight/2, 0], rot: [0, Math.PI/2, 0] }
+            { pos: [0, wallHeight/2, halfBoard + 0.1], size: [this.BOARD_SIZE + 0.2, wallHeight, 0.2] },
+            { pos: [0, wallHeight/2, -(halfBoard + 0.1)], size: [this.BOARD_SIZE + 0.2, wallHeight, 0.2] },
+            { pos: [halfBoard + 0.1, wallHeight/2, 0], size: [0.2, wallHeight, this.BOARD_SIZE] },
+            { pos: [-(halfBoard + 0.1), wallHeight/2, 0], size: [0.2, wallHeight, this.BOARD_SIZE] }
         ];
         
-        walls.forEach(wall => {
-            const wallGeometry = new THREE.BoxGeometry(this.BOARD_SIZE, wallHeight, 0.2);
+        walls.forEach((wall, index) => {
+            const wallGeometry = new THREE.BoxGeometry(...wall.size);
             const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
             wallMesh.position.set(...wall.pos);
-            wallMesh.rotation.set(...wall.rot);
             wallMesh.castShadow = true;
+            wallMesh.receiveShadow = true;
             this.scene.add(wallMesh);
         });
+        
+        console.log('Arena created');
     }
     
     setupMouseControls() {
@@ -214,7 +258,7 @@ class Snake3DGame {
             
             this.cameraAngleY -= deltaX * 0.01;
             this.cameraAngleX -= deltaY * 0.01;
-            this.cameraAngleX = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.cameraAngleX));
+            this.cameraAngleX = Math.max(-Math.PI/2 + 0.1, Math.min(-0.1, this.cameraAngleX)); // Keep camera above ground
             
             this.updateCamera();
             
@@ -228,8 +272,8 @@ class Snake3DGame {
         
         canvas.addEventListener('wheel', (e) => {
             e.preventDefault();
-            this.cameraDistance += e.deltaY * 0.01;
-            this.cameraDistance = Math.max(10, Math.min(40, this.cameraDistance));
+            this.cameraDistance += e.deltaY * 0.02;
+            this.cameraDistance = Math.max(15, Math.min(50, this.cameraDistance));
             this.updateCamera();
         });
     }
@@ -239,8 +283,12 @@ class Snake3DGame {
         const y = Math.sin(this.cameraAngleX) * this.cameraDistance;
         const z = Math.cos(this.cameraAngleY) * Math.cos(this.cameraAngleX) * this.cameraDistance;
         
-        this.camera.position.set(x, y, z);
+        this.camera.position.set(x, -y, z); // Negative y for proper orientation
         this.camera.lookAt(0, 0, 0);
+        
+        if (this.renderer) {
+            this.renderer.render(this.scene, this.camera);
+        }
     }
     
     setupEventListeners() {
@@ -297,19 +345,32 @@ class Snake3DGame {
     }
     
     startGame() {
+        console.log('Starting 3D game...');
         this.gameState = 'playing';
         this.score = 0;
-        this.snake = [{ x: 0, z: 0 }, { x: -1, z: 0 }, { x: -2, z: 0 }];
+        
+        // FIXED INITIAL SNAKE POSITION
+        this.snake = [
+            { x: 0, z: 0 }, 
+            { x: -1, z: 0 }, 
+            { x: -2, z: 0 }
+        ];
         this.direction = { x: 1, z: 0 };
         this.nextDirection = { x: 1, z: 0 };
         this.lastMoveTime = 0;
         
-        if (!this.renderer) this.initGame3D();
+        // Initialize 3D scene if needed
+        if (!this.renderer) {
+            this.initGame3D();
+        }
         
-        // Clear existing snake
-        this.snakeSegments.forEach(segment => this.scene.remove(segment));
+        // Clear existing snake segments
+        this.snakeSegments.forEach(segment => {
+            if (this.scene) this.scene.remove(segment);
+        });
         this.snakeSegments = [];
         
+        // Create initial snake
         this.createSnakeSegments();
         this.generateFood();
         this.updateScore();
@@ -317,20 +378,28 @@ class Snake3DGame {
         
         if (this.gameLoopId) cancelAnimationFrame(this.gameLoopId);
         this.gameLoop();
+        
+        console.log('Game started, snake segments:', this.snakeSegments.length);
     }
     
     createSnakeSegments() {
+        console.log('Creating snake segments for positions:', this.snake);
+        
         this.snake.forEach((segment, index) => {
-            const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+            const geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
             const material = new THREE.MeshLambertMaterial({ 
-                color: index === 0 ? 0x00ff00 : 0x008800 
+                color: index === 0 ? 0x00ff00 : 0x00aa00
             });
             const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(segment.x, 0.4, segment.z);
+            mesh.position.set(segment.x, 0.5, segment.z); // Y = 0.5 to sit on ground
             mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            
             this.snakeSegments.push(mesh);
             this.scene.add(mesh);
         });
+        
+        console.log('Created', this.snakeSegments.length, 'snake segments');
     }
     
     togglePause() {
@@ -368,10 +437,10 @@ class Snake3DGame {
         head.x += this.direction.x;
         head.z += this.direction.z;
         
-        // Wall collision
-        const halfBoard = this.BOARD_SIZE / 2;
-        if (head.x < -halfBoard + 0.5 || head.x > halfBoard - 0.5 || 
-            head.z < -halfBoard + 0.5 || head.z > halfBoard - 0.5) {
+        // Wall collision (fixed bounds)
+        const halfBoard = Math.floor(this.BOARD_SIZE / 2);
+        if (head.x < -halfBoard || head.x >= halfBoard || 
+            head.z < -halfBoard || head.z >= halfBoard) {
             this.gameOver();
             return;
         }
@@ -396,21 +465,23 @@ class Snake3DGame {
         } else {
             this.snake.pop();
             const tailSegment = this.snakeSegments.pop();
-            this.scene.remove(tailSegment);
+            if (tailSegment) this.scene.remove(tailSegment);
         }
         
         this.updateSnakePositions();
         
+        // Update snake light
         if (this.snakeLight) {
             this.snakeLight.position.set(head.x, 2, head.z);
         }
     }
     
     addSnakeSegment() {
-        const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-        const material = new THREE.MeshLambertMaterial({ color: 0x008800 });
+        const geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
+        const material = new THREE.MeshLambertMaterial({ color: 0x00aa00 });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.castShadow = true;
+        mesh.receiveShadow = true;
         this.snakeSegments.push(mesh);
         this.scene.add(mesh);
     }
@@ -418,8 +489,10 @@ class Snake3DGame {
     updateSnakePositions() {
         this.snake.forEach((segment, index) => {
             if (this.snakeSegments[index]) {
-                this.snakeSegments[index].position.set(segment.x, 0.4, segment.z);
-                this.snakeSegments[index].material.color.setHex(index === 0 ? 0x00ff00 : 0x008800);
+                this.snakeSegments[index].position.set(segment.x, 0.5, segment.z);
+                // Update colors
+                const color = index === 0 ? 0x00ff00 : 0x00aa00;
+                this.snakeSegments[index].material.color.setHex(color);
             }
         });
     }
@@ -439,24 +512,29 @@ class Snake3DGame {
         
         this.food = foodPosition;
         
+        // Remove old food
         if (this.foodMesh) this.scene.remove(this.foodMesh);
         
+        // Create new food
         const geometry = new THREE.SphereGeometry(0.4, 16, 12);
         const material = new THREE.MeshLambertMaterial({ 
             color: 0xff4444,
             emissive: 0x330000
         });
         this.foodMesh = new THREE.Mesh(geometry, material);
-        this.foodMesh.position.set(this.food.x, 0.4, this.food.z);
+        this.foodMesh.position.set(this.food.x, 0.5, this.food.z);
         this.foodMesh.castShadow = true;
         this.scene.add(this.foodMesh);
+        
+        console.log('Food generated at:', this.food);
     }
     
     render() {
-        if (this.renderer && this.gameState !== 'title') {
+        if (this.renderer && this.scene && this.camera && this.gameState !== 'title') {
+            // Animate food
             if (this.foodMesh) {
                 this.foodMesh.rotation.y += 0.05;
-                this.foodMesh.position.y = 0.4 + Math.sin(Date.now() * 0.003) * 0.1;
+                this.foodMesh.position.y = 0.5 + Math.sin(Date.now() * 0.003) * 0.1;
             }
             
             this.renderer.render(this.scene, this.camera);
@@ -472,6 +550,7 @@ class Snake3DGame {
     }
     
     gameOver() {
+        console.log('Game over!');
         this.gameState = 'gameOver';
         
         let isNewHighScore = false;
@@ -518,12 +597,28 @@ class Snake3DGame {
     }
 }
 
-// Initialize 3D Snake Game
+// Initialize 3D Snake Game with error handling
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing game...');
+    
+    if (!window.THREE) {
+        console.error('Three.js not loaded!');
+        alert('Three.js library failed to load. Please refresh the page.');
+        return;
+    }
+    
     if (!window.WebGLRenderingContext) {
+        console.error('WebGL not supported!');
         alert('Your browser does not support WebGL. Please use a modern browser to play this 3D game.');
         return;
     }
     
-    new Snake3DGame();
+    try {
+        const game = new Snake3DGame();
+        window.snakeGame = game; // For debugging
+        console.log('3D Snake Game initialized successfully!');
+    } catch (error) {
+        console.error('Game initialization failed:', error);
+        alert('Failed to initialize the game. Please refresh the page.');
+    }
 });
