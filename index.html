@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <title>3D Snake Game</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
 </head>
 <body>
     <div class="game-container">
         <!-- Title Screen -->
         <div id="title-screen" class="screen">
             <div class="title-content">
-                <h1>🐍 Snake Game</h1>
+                <h1>🐍 3D Snake Game</h1>
+                <div class="preview-container">
+                    <div id="preview-canvas"></div>
+                </div>
                 <div class="instructions">
-                    <p>Use arrow keys or WASD to move</p>
+                    <p>Use arrow keys or WASD to move in 3D space</p>
                     <p>Press SPACE to pause/unpause</p>
                     <p>Press R to restart</p>
+                    <p>Mouse drag to rotate camera view</p>
                     <p>Avoid walls and don't eat yourself!</p>
                 </div>
-                <button id="start-btn" class="btn">Start Game</button>
+                <button id="start-btn" class="btn">Start 3D Game</button>
             </div>
         </div>
 
@@ -39,11 +44,10 @@
             </div>
             
             <div class="game-canvas-container">
-                <canvas id="game-canvas" width="400" height="400"></canvas>
-            </div>
-            
-            <div class="game-controls">
-                <p>Arrow Keys or WASD to move • SPACE to pause • R to restart</p>
+                <div id="game-canvas"></div>
+                <div class="camera-controls">
+                    <p>Drag mouse to rotate camera • Arrow Keys/WASD to move • SPACE to pause • R to restart</p>
+                </div>
             </div>
         </div>
 
