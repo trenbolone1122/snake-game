@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Title Screen -->
+        <div id="title-screen" class="screen">
+            <div class="title-content">
+                <h1>🐍 Snake Game</h1>
+                <div class="instructions">
+                    <p>Use arrow keys or WASD to move</p>
+                    <p>Press SPACE to pause/unpause</p>
+                    <p>Press R to restart</p>
+                    <p>Avoid walls and don't eat yourself!</p>
+                </div>
+                <button id="start-btn" class="btn">Start Game</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div class="game-header">
+                <div class="score-container">
+                    <div class="score-item">
+                        <span class="score-label">Score:</span>
+                        <span id="current-score">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label">High Score:</span>
+                        <span id="high-score">0</span>
+                    </div>
+                </div>
+                <div id="pause-indicator" class="status hidden">PAUSED</div>
+            </div>
+            
+            <div class="game-canvas-container">
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+            </div>
+            
+            <div class="game-controls">
+                <p>Arrow Keys or WASD to move • SPACE to pause • R to restart</p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen hidden">
+            <div class="game-over-content">
+                <h2>Game Over!</h2>
+                <div class="final-score-container">
+                    <p>Final Score: <span id="final-score">0</span></p>
+                    <div id="high-score-message" class="hidden">🎉 New High Score!</div>
+                </div>
+                <div class="game-over-buttons">
+                    <button id="restart-btn" class="btn">Play Again</button>
+                    <button id="menu-btn" class="btn btn-secondary">Main Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
