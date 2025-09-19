@@ -1,91 +1,105 @@
-# 🐍 Snake Game
+# 🐍 3D Snake Game
 
-A classic Snake game built with vanilla HTML5, CSS3, and JavaScript. Play the timeless arcade game right in your browser!
+A stunning **3D Snake game** built with **Three.js**, **HTML5**, **CSS3**, and **JavaScript**. Experience the classic arcade game in a fully immersive 3D environment with modern graphics and smooth animations!
 
 ## 🎮 Play Now
 
-**[Play the Game](https://trenbolone1122.github.io/snake-game/)**
+**[Play the 3D Game](https://trenbolone1122.github.io/snake-game/)**
 
-## ✨ Features
+## ✨ 3D Features
 
-- **Classic Gameplay**: Traditional snake mechanics with modern polish
-- **Responsive Design**: Works on desktop and mobile devices
-- **Smooth Controls**: Arrow keys or WASD for movement
-- **Score Tracking**: Keep track of your current and high scores
-- **Pause Functionality**: Pause/unpause with spacebar
-- **Game States**: Start screen, gameplay, pause, and game over screens
-- **Visual Effects**: Modern styling with gradients and animations
-- **Progressive Speed**: Game gets faster as you score higher
+- **Full 3D Environment**: Navigate through a stunning 3D arena with proper depth and perspective
+- **Interactive Camera**: Mouse controls to rotate and zoom the camera for optimal viewing angles
+- **3D Snake**: Volumetric snake segments with realistic lighting and shadows
+- **Dynamic Lighting**: Point light following the snake head plus environmental lighting
+- **3D Food Items**: Rotating, glowing spherical food with animated floating effects
+- **Immersive Arena**: 3D walls, textured ground plane, and grid system
+- **WebGL Rendering**: Hardware-accelerated graphics for smooth 60fps gameplay
+- **3D Preview**: Rotating 3D snake preview on the title screen
 
 ## 🎯 How to Play
 
-1. **Start**: Click "Start Game" or press any key from the title screen
-2. **Move**: Use arrow keys or WASD to control the snake
-3. **Eat**: Guide the snake to eat the red food blocks
-4. **Grow**: Each food eaten makes the snake longer and increases your score
-5. **Avoid**: Don't hit the walls or the snake's own body
-6. **Win**: Try to beat your high score!
+1. **Start**: Click "Start 3D Game" or press any key from the title screen
+2. **Move**: Use arrow keys or WASD to control the snake in 3D space
+3. **Camera**: Drag mouse to rotate camera view, scroll to zoom in/out
+4. **Eat**: Guide the snake to eat the glowing red food spheres
+5. **Grow**: Each food eaten makes the snake longer and increases your score
+6. **Avoid**: Don't hit the walls or the snake's own body
+7. **Win**: Try to beat your high score in the 3D environment!
 
 ## 🎮 Controls
 
 | Key | Action |
 |-----|--------|
-| ↑ or W | Move Up |
-| ↓ or S | Move Down |
-| ← or A | Move Left |
-| → or D | Move Right |
+| ↑ or W | Move Forward (North) |
+| ↓ or S | Move Backward (South) |
+| ← or A | Move Left (West) |
+| → or D | Move Right (East) |
+| **Mouse Drag** | **Rotate Camera** |
+| **Mouse Scroll** | **Zoom In/Out** |
 | Space | Pause/Unpause |
 | R | Restart Game |
 | Enter | Start Game / Play Again |
 | Escape | Return to Main Menu |
 
-## 🏗️ Game Features
+## 🏗️ 3D Game Features
 
-### Core Mechanics
-- Snake grows by one segment for each food consumed
-- Score increases by 10 points per food item
-- Game speed increases progressively with score
-- Collision detection for walls and self-collision
+### Graphics & Rendering
+- **Three.js WebGL renderer** with antialiasing
+- **Real-time shadows** and lighting effects
+- **3D snake segments** as individual cubes with proper materials
+- **Glowing food spheres** with emissive materials
+- **Textured 3D arena** with walls and ground plane
+- **Grid overlay** for spatial reference
 
-### Visual Design
-- Modern dark theme with blue gradient background
-- Glowing green snake with distinct head and body colors
-- Red food with rounded corners
-- Smooth animations and transitions
-- Responsive layout for different screen sizes
+### Camera System
+- **Orbital camera controls** with mouse interaction
+- **Smooth camera movements** and zoom functionality
+- **Adjustable viewing angles** for optimal gameplay
+- **Perspective projection** for realistic 3D depth
 
-### Game States
-1. **Title Screen**: Game introduction and instructions
-2. **Playing**: Active gameplay with score display
-3. **Paused**: Game paused with indicator
-4. **Game Over**: Final score display with restart options
+### Lighting
+- **Ambient lighting** for overall scene illumination
+- **Directional lighting** casting realistic shadows
+- **Dynamic point light** following the snake head
+- **Emissive materials** for glowing effects
+
+### Game Mechanics (Enhanced for 3D)
+- Snake movement in 3D coordinate system (X, Z plane)
+- 3D collision detection for walls and self-collision
+- Dynamic snake segment creation and removal
+- 3D food placement with collision avoidance
+- Progressive speed increase with visual feedback
 
 ## 🛠️ Technical Details
 
 ### Built With
-- **HTML5**: Semantic structure and canvas element
-- **CSS3**: Modern styling with flexbox and animations
-- **JavaScript ES6+**: Game logic and canvas rendering
+- **Three.js**: 3D graphics library for WebGL rendering
+- **HTML5**: Semantic structure and modern web standards
+- **CSS3**: Advanced styling with 3D-themed design
+- **JavaScript ES6+**: Modern game logic and 3D scene management
 
-### Browser Support
-- Chrome 60+
+### Browser Requirements
+- **WebGL Support**: Required for 3D graphics rendering
+- Chrome 60+ (Recommended)
 - Firefox 55+
 - Safari 12+
 - Edge 79+
 
 ### Performance
-- 60 FPS smooth gameplay
-- Optimized canvas rendering
-- Efficient collision detection
-- Session-based high score storage
+- **60 FPS** smooth 3D gameplay
+- **Hardware acceleration** via WebGL
+- **Optimized rendering** with efficient mesh management
+- **Shadow mapping** for realistic lighting
+- **Responsive canvas** sizing
 
 ## 📁 Project Structure
 
 ```
 snake-game/
-├── index.html      # Main HTML structure
-├── style.css       # Game styling and animations
-├── app.js          # Game logic and mechanics
+├── index.html      # 3D game HTML structure
+├── style.css       # 3D-themed styling and animations
+├── app.js          # 3D game logic with Three.js
 └── README.md       # Project documentation
 ```
 
@@ -105,40 +119,64 @@ Simply visit: [https://trenbolone1122.github.io/snake-game/](https://trenbolone1
    cd snake-game
    ```
 
-3. Open `index.html` in your browser or serve it with a local web server:
+3. Serve with a local web server (required for Three.js):
    ```bash
    # Using Python 3
    python -m http.server 8000
    
    # Using Node.js (with http-server)
    npx http-server
+   
+   # Using Live Server (VS Code extension)
+   # Right-click index.html -> "Open with Live Server"
    ```
 
 4. Open your browser and visit `http://localhost:8000`
 
-## 🎨 Customization
+### WebGL Check
+The game automatically checks for WebGL support and will alert if your browser doesn't support it.
 
-The game is easily customizable:
+## 🎨 3D Customization
 
-- **Colors**: Modify CSS variables in `style.css`
-- **Speed**: Adjust `GAME_SPEED` in `app.js`
-- **Grid Size**: Change `GRID_SIZE` in `app.js`
-- **Scoring**: Modify score increment in the `update()` method
+The 3D game is highly customizable:
+
+- **Colors**: Modify material colors in `app.js`
+- **Lighting**: Adjust light intensity and positioning
+- **Arena Size**: Change `BOARD_SIZE` for different playing field sizes
+- **Snake Appearance**: Modify geometry and materials
+- **Camera Behavior**: Adjust camera distance and angles
+- **Speed**: Modify `GAME_SPEED` for different difficulty levels
 
 ## 🐛 Known Issues
 
 - High score is stored per session (resets on browser close)
-- Mobile touch controls not implemented (keyboard only)
+- Mobile touch controls not implemented (mouse/keyboard only)
+- Requires WebGL-compatible browser
 
-## 🔮 Future Enhancements
+## 🔮 Future 3D Enhancements
 
-- [ ] Touch/swipe controls for mobile devices
-- [ ] Multiple difficulty levels
-- [ ] Power-ups and special food items
-- [ ] Persistent high score storage
-- [ ] Sound effects and background music
-- [ ] Leaderboard functionality
-- [ ] Different game modes (walls/no walls, etc.)
+- [ ] **Mobile touch controls** for camera and movement
+- [ ] **VR support** for immersive gameplay
+- [ ] **Particle effects** for food consumption
+- [ ] **3D sound effects** with positional audio
+- [ ] **Multiple camera modes** (first-person, top-down, etc.)
+- [ ] **Environmental effects** (fog, skybox, weather)
+- [ ] **3D power-ups** and special items
+- [ ] **Multiplayer 3D mode**
+- [ ] **Level editor** for custom 3D arenas
+- [ ] **Replay system** with 3D camera paths
+
+## 💻 System Requirements
+
+### Minimum
+- **GPU**: DirectX 9 compatible
+- **RAM**: 2GB
+- **Browser**: WebGL 1.0 support
+
+### Recommended
+- **GPU**: Dedicated graphics card
+- **RAM**: 4GB+
+- **Browser**: Latest version with WebGL 2.0
 
 ## 📄 License
 
@@ -148,10 +186,17 @@ This project is open source and available under the [MIT License](LICENSE).
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/trenbolone1122/snake-game/issues).
 
+### Areas for Contribution
+- 3D graphics enhancements
+- Performance optimizations
+- Mobile/touch support
+- VR/AR features
+- Sound and music integration
+
 ## ⭐ Show Your Support
 
-If you enjoyed this game, please give it a ⭐ on GitHub!
+If you enjoyed this 3D game, please give it a ⭐ on GitHub!
 
 ---
 
-**Enjoy the game! 🐍🎮**
+**Experience Snake like never before in full 3D! 🐍🎮✨**
